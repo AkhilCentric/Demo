@@ -20,20 +20,7 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '6.0.x'
-
-    - name: Download WiX Toolset v4
-      run: |
-        Invoke-WebRequest -Uri https://github.com/wixtoolset/wix/releases/download/v4.0.0/wix-4.0.0.5512.zip -OutFile wix.zip
-        Expand-Archive -Path wix.zip -DestinationPath C:\wix
-        $env:PATH += ';C:\wix'
-
-    - name: Verify WiX Installation
-      run: |
-        wix --version
-
-    - name: Restore dependencies
-      run: dotnet restore
-
+    
     - name: Build Project
       run: dotnet build Demo.csproj --configuration Release
 
