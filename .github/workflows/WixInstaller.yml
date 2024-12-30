@@ -20,6 +20,10 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '6.0.x'
+
+    - name: Build Demo Project
+      run:  |
+        msbuild demo.csproj /p:Configuration=Release
     
     - name: Build MSI using WiX
       run: |
