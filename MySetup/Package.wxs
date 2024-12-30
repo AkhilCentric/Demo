@@ -1,0 +1,10 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="DemoInstaller_1.0.0.0" Manufacturer="Demo" Version="1.0.0.0" UpgradeCode="07ee5e59-b4df-410e-9797-91c5115a3f69">
+    <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
+
+    <Feature Id="Main">
+      <ComponentGroupRef Id="ExampleComponents" />
+    </Feature>
+  </Package>
+	
+</Wix>
