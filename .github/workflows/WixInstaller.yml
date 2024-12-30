@@ -23,7 +23,7 @@ jobs:
 
     - name: Install WiX Toolset
       run: |
-        choco install wixtoolset --yes
+        choco install wixtoolset --yes || choco upgrade wixtoolset --yes
         refreshenv
 
     - name: Restore dependencies
