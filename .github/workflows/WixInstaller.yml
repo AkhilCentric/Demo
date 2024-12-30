@@ -1,0 +1,43 @@
+name: Build MSI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x'
+
+    - name: Install WiX Toolset
+      run: |
+        choco install wixtoolset --yes
+        refreshenv
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build DemoApp
+      run: dotnet build DemoApp/DemoApp.csproj --configuration Release
+
+    - name: Build MSI using WiX
+      run: |
+        msbuild MySetup/MySetup.wixproj /p:Configuration=Release
+
+    - name: Upload MSI Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: MSI
+        path: MySetup/bin/Release/DemoApp.msi
