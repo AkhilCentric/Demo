@@ -1,4 +1,4 @@
-name: Build MSI
+name: Build MSI with WiX v4
 
 on:
   push:
@@ -21,23 +21,28 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
-    - name: Install WiX Toolset
+    - name: Download WiX Toolset v4
       run: |
-        choco install wixtoolset --yes || choco upgrade wixtoolset --yes
-        refreshenv
+        Invoke-WebRequest -Uri https://github.com/wixtoolset/wix/releases/download/v4.0.0/wix-4.0.0.5512.zip -OutFile wix.zip
+        Expand-Archive -Path wix.zip -DestinationPath C:\wix
+        $env:PATH += ';C:\wix'
+
+    - name: Verify WiX Installation
+      run: |
+        wix --version
 
     - name: Restore dependencies
       run: dotnet restore
 
-    - name: Build DemoApp
-      run: dotnet build DemoApp/DemoApp.csproj --configuration Release
+    - name: Build Project
+      run: dotnet build Demo.csproj --configuration Release
 
-    - name: Build MSI using WiX
+    - name: Build MSI
       run: |
-        msbuild MySetup/MySetup.wixproj /p:Configuration=Release
+        wix build MySetup/MySetup.wxs -o MySetup/Setup.msi
 
     - name: Upload MSI Artifact
       uses: actions/upload-artifact@v3
       with:
         name: MSI
-        path: MySetup/bin/Release/DemoApp.msi
+        path: MySetup/Setup.msi
