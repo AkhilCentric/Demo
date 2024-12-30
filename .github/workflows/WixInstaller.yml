@@ -21,6 +21,11 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
+    - name: Install MSBuild
+      run: |
+        choco install visualstudio2019-buildtools --yes --include-optional
+        refreshenv
+
     - name: Build Demo Project
       run:  |
         msbuild demo.csproj /p:Configuration=Release
