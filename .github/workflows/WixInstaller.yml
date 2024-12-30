@@ -21,12 +21,9 @@ jobs:
       with:
         dotnet-version: '6.0.x'
     
-    - name: Build Project
-      run: dotnet build Demo.csproj --configuration Release
-
-    - name: Build MSI
+    - name: Build MSI using WiX
       run: |
-        wix build MySetup/MySetup.wxs -o MySetup/Setup.msi
+        msbuild MySetup/MySetup.wixproj /p:Configuration=Release
 
     - name: Upload MSI Artifact
       uses: actions/upload-artifact@v3
